@@ -13,29 +13,34 @@ void deriveKey(unsigned char* key, int numBlocks,unsigned char* devKey){
 	uint8_t	count = 0;				   
 		
 	int i,e;
+	
+	//Auxiliar vector for aes
 	unsigned char state[BLOCK_SIZE];
 	unsigned char keyAux[BLOCK_SIZE];
 	
 	for(i = 0; i < numBlocks; i++){
 		
-		context[BLOCK_SIZE-1]=count;   
-		memcpy(state,&context[0], BLOCK_SIZE);
+		//contex "increment"
+		context[BLOCK_SIZE-1] = count;   
 
-		
-		//Encrip the IV/nonce using a - k1;
+		memcpy(state,&context[0], BLOCK_SIZE);
 		memcpy(keyAux,key, BLOCK_SIZE);
+
 		aes_enc_dec(state,keyAux,0);
 		
 		memcpy(&devKey[BLOCK_SIZE * i],state,BLOCK_SIZE);
 		count++;
 		
+		/*
 			printf("\n state \n");
 			for(e = 0; e < BLOCK_SIZE; e++){
 			printf("%02x, ",devKey[e] & 0xff);
 			}
-		
+		*/
 		}
 	
 	
+	
 	return;
+	
 	}
